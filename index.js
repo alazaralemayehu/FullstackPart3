@@ -1,9 +1,12 @@
 const http = require('http')
+const morgan = require('morgan')
+
 const express = require('express')
 const { response } = require('express')
 const { filter } = require('methods')
 const app = express()
 app.use(express.json())
+
 
 let persons = [
     { 
@@ -28,9 +31,28 @@ let persons = [
     } 
 ]
 
+
+morgan.token('postDataToken', function(req, res) {
+    // custom tokesn should return string
+    const body = req.body
+    return JSON.stringify(body)
+})
+app.use(morgan(function (tokens, req, res) {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, 'content-length'), '-',
+      tokens['response-time'](req, res), 'ms',
+      tokens.postDataToken(req, res)
+    ].join(' ')
+  })
+)
+
 const getRandomInt = () => {
     return Math.floor(Math.random() * Math.floor(1000000000));
-  }
+}
+
 
 app.get('/info', (request, response)=> {
     const messsage = `Phone book has info for ${persons.length} people
