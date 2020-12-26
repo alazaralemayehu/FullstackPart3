@@ -112,6 +112,8 @@ app.post('/api/persons', (request, response, next) => {
 
             Person.findByIdAndUpdate(person.id, personToUpdate, {new: true})
             .then(updatedPerson => {
+                console.log('person updated')
+
                 response.json(updatedPerson)
             }).catch(error => next(error))
         }}).catch(error => next(error))
@@ -121,7 +123,6 @@ app.post('/api/persons', (request, response, next) => {
         number: number
     })
     person.save().then(savedPerson => {
-        console.log('person saved')
         console.log(savedPerson)
         response.json(savedPerson)
     })
