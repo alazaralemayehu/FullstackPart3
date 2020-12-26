@@ -2,10 +2,11 @@ const http = require('http')
 const morgan = require('morgan')
 
 const express = require('express')
-const { response } = require('express')
-const { filter } = require('methods')
+const cors = require('cors')
+
 const app = express()
 app.use(express.json())
+app.use(cors())
 
 
 let persons = [
@@ -28,6 +29,11 @@ let persons = [
         "name": "Mary Poppendieck", 
         "number": "39-23-6423122",
         "id": 4
+    },
+    { 
+        "name": "Alazar Poppendieck", 
+        "number": "39-23-6423122",
+        "id": 5
     } 
 ]
 
@@ -117,7 +123,7 @@ app.post('/api/persons', (request, response) => {
     persons = persons.concat(person)
     response.json(person)
 })
-const PORT = 3001
+const PORT = proces.env.PORT ||  3001
 app.listen(PORT, () => {
     console.log(`Server running on Port ${PORT}`)
 })
