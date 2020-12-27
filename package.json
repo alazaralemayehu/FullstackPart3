@@ -6,9 +6,9 @@
   "scripts": {
     "build:ui": "rm -rf buid &&  cd ../ReactModule1/part2/phonebook && npm run build --prod && cp -r build ../../../NodeModule",
     "deploy": "git push heroku main",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",    
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
     "logs:prod": "heroku logs --tail",
-    
+    "lint": "node_modules/.bin/eslint index.js",
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,6 +24,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^7.16.0",
     "nodemon": "^2.0.6"
   }
 }
