@@ -4,6 +4,11 @@
   "description": "phonebook backend application ",
   "main": "index.js",
   "scripts": {
+    "build:ui": "rm -rf buid &&  cd ../ReactModule1/part2/phonebook && npm run build --prod && cp -r build ../../NodeModule",
+    "deploy": "git push heroku main",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",    
+    "logs:prod": "heroku logs --tail",
+    
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,6 +20,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongoose": "^5.11.8",
+    "mongoose-unique-validator": "^2.0.3",
     "morgan": "^1.10.0"
   },
   "devDependencies": {

@@ -6,7 +6,6 @@ const mongoose = require ('mongoose')
 const cors = require('cors')
 const Person = require('./models/person')
 const app = express()
-
 app.use(express.json())
 app.use(cors())
 app.use(express.static('build'))
@@ -64,11 +63,11 @@ app.put('/api/persons/:id', (request, response, next) => {
     const body = request.body
   
     const person = {
-      name: body.name,
       number: body.number,
     }
+    console.log(request.params.id)
   
-    Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    Person.findByIdAndUpdate(request.params.id, person, { new: true, runValidators: true })
       .then(updatedPerson => {
         response.json(updatedPerson)
       })
@@ -87,45 +86,15 @@ app.delete('/api/persons/:id', (request, response)=> {
 app.post('/api/persons', (request, response, next) => {
     console.log('here')
     const body = request.body
-    const name = body.name
-    const number = body.number
-
-    if (!name) {
-        return response.status(400).json({
-            error: 'number is missing'
-        })
-    }
-
-    if (!number) {
-        return response.status(400).json({
-            error: 'number is missing'
-        })
-    }
-
-    Person.find({name:name})
-        .then(person => {
-        if (person) {
-            const personToUpdate = {
-                name: person.name,
-                number: number
-            }
-
-            Person.findByIdAndUpdate(person.id, personToUpdate, {new: true})
-            .then(updatedPerson => {
-                console.log('person updated')
-
-                response.json(updatedPerson)
-            }).catch(error => next(error))
-        }}).catch(error => next(error))
     
     const person = new Person({
-        name : name,
-        number: number
+        name : body.name,
+        number: body.number
     })
     person.save().then(savedPerson => {
         console.log(savedPerson)
         response.json(savedPerson)
-    })
+    }).catch((error) => next(error))
 })
 
 
@@ -139,7 +108,9 @@ const errorHandler = (error, request, response, next) => {
     console.log(error.message)
     if (error.name === 'CastError'){
         return response.status(400).send({ error: 'malformed Id'})
-    }
+    } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
     next()
 }
 

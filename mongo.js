@@ -1,4 +1,3 @@
-// mongodb+srv://fullstack:<password>@project0.laffz.mongodb.net/<dbname>?retryWrites=true&w=majority
 const mongoose = require ('mongoose')
 
 const addPerson = () => {
